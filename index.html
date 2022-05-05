@@ -11,32 +11,34 @@
 </head>
 <body>
     <header>
-        <center>
+        <center class="text-white">
             <h1>Weather Dashboard</h1>
         </center>  
     </header>
-    <aside>
-        <h2>Search for a City:</h2>
-        <input type="text" id="whatCity" placeholder="Searc for city">
-        <button id="click" class="btn-primary">Search</button>
-    </aside>
+
+    <div class="wrapContainer">
+        <aside id="side" class="sidebar w-30 ">
+            <h2>Search for a City:</h2>
+            <input type="text" id="whatCity" placeholder="Searc for city">
+            <button id="click" class="btn btn-secondary">Search</button>
+            <div class="list-group" id="history"></div>
+        </aside>
     
-        
-    <div id="currentWeather"></div>
-    <div id="futureWeather">
-        <div id="eachDay" ></div>
+        <div class="allWeather">
+        <div id="cardContainer">   
+            <div id="currentWeather" class="card-body"></div>
+        </div> 
+    
+        <div id="forcast"></div>
+    
+            <div id="futureWeather" >      
+            </div>
+        </div>
     </div>
-   
-
     
-
-
-
-
-
-
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="./Assets/script.js"></script>
 </body>
 </html>
