@@ -2,7 +2,6 @@
 var oneCallEndPointUrl = "https://api.openweathermap.org/data/2.5/onecall"
 var city = ""
 var date = moment().format("MM/DD/YYYY")
-
 var apiKey = "fc9179d977bc1ac53ba567c6c820e30c"
 var weatherEndPointUrl = "https://api.openweathermap.org/data/2.5/weather"
 var cityArray = JSON.parse(localStorage.getItem("searchedCity"))?JSON.parse(localStorage.getItem("searchedCity")):[];
@@ -13,13 +12,11 @@ var clickMe = document.getElementById("click")
 var cardContainer = document.getElementById("cardContainer")
 var currentWeatherContainer = document.getElementById("currentWeather")
 var forcast = document.getElementById("forcast")
-var groupContainer = document.getElementById("group")
 var futureWeatherContainer = document.getElementById("futureWeather")
-var eachDayContainer = document.getElementById("eachDay")
 var searchHistoryContainer = document.getElementById("side")
 var listContainer = document.getElementById("history")
 
-
+// Getting weater data (current & future) from API
  function getWeather (){
 
     fetch (weatherEndPointUrl + `?q=${encodeURI(city)}&appid=${apiKey}`)
@@ -38,14 +35,16 @@ var listContainer = document.getElementById("history")
             console.log(oneCallData)
             displayCurrentWeather(oneCallData);
             displayFutureWeather(oneCallData);
-            cityArray.push(city)
-            localStorage.setItem("searchedCity",JSON.stringify(cityArray))
+            if (cityArray.indexOf(city) === -1) {
+              cityArray.push(city)
+                localStorage.setItem("searchedCity",JSON.stringify(cityArray))
+            }
             searchHistory();
         })
     })
 }
 
-
+// Listen for click on search & get the user's input city
 clickMe.addEventListener("click", function (event){
     event.preventDefault();
     city = inputValue.value.trim();
@@ -54,11 +53,10 @@ clickMe.addEventListener("click", function (event){
     if (! city) {
         return;
     }
-    
     getWeather();
-    
 })
 
+// Create, format & append elements for current weather data
 function displayCurrentWeather (data){
 console.log(data.current)
 currentWeatherContainer.innerHTML = ""
@@ -69,6 +67,7 @@ var humidity = document.createElement("p");
 var uvIndex = document.createElement("p");
 var uvBadge = document.createElement("button");
 var tempKelvin = data.current.temp
+
 cityDate.innerText = `${city} (${date})`
 temp.innerText = "Temp: " + Math.floor((((tempKelvin-273.15)*1.8)+32)) + " °F"
 wind.innerText = "Wind: " + data.current.wind_speed + " MPH"
@@ -88,22 +87,14 @@ cityDate.setAttribute("class", "card-title")
 temp.setAttribute("class", "card-text")
 wind.setAttribute("class", "card-text")
 humidity.setAttribute("class", "card-text")
-
-
 uvIndex.append(uvBadge)
-
 var icons = document.createElement("img")
 icons.setAttribute("src", "http://openweathermap.org/img/wn/" + data.current.weather[0].icon +"@2x.png" )
 cityDate.append(icons)
 currentWeatherContainer.append(cityDate, temp, wind, humidity, uvIndex)
-
-
 }
 
-
-
-
-
+// Create, format & append elements for future weather data
 function displayFutureWeather (data){
     console.log(data.daily) 
     forcast.innerHTML = ""
@@ -118,7 +109,6 @@ futureWeatherContainer.innerHTML = ""
         var windd = document.createElement("p");
         var humidityy = document.createElement("p");
         var eachCard = document.createElement("div")
-
         var futureDate = document.createElement("p")
         var temppKelvin = data.daily[i].temp.day
         
@@ -127,20 +117,17 @@ futureWeatherContainer.innerHTML = ""
         humidityy.innerText = "Humidity: " + data.daily[i].humidity + " %"
         futureDate.innerText = moment().add(i, "days").format("MM/DD/YYYY")
         var iconss = document.createElement("img")
-        iconss.setAttribute("src", "http://openweathermap.org/img/wn/" + data.daily[i].weather[0].icon +"@2x.png" )
-        
-        
+        iconss.setAttribute("src", "http://openweathermap.org/img/wn/" + data.daily[i].weather[0].icon +"@2x.png" )   
         tempp.setAttribute("class", "card-text")
         windd.setAttribute("class", "card-text")
         humidityy.setAttribute("class", "card-text")
         eachCard.setAttribute("class", "card equalCard")
-
         eachCard.append(futureDate, tempp, windd, humidityy, iconss)
         futureWeatherContainer.append(eachCard);
-        
     }
 }
 
+// // Create, format & append elements for search history data
 function searchHistory (){
     listContainer.innerHTML = ""
     for (var i = 0; i < cityArray.length; i++) {
@@ -154,8 +141,7 @@ function searchHistory (){
             city = event.target.innerText
             getWeather()
         })
-    }
-    
+    } 
 }
 
 searchHistory();
